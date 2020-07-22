@@ -37,6 +37,11 @@ def main(dest_root_dir, assign_dir, force, dry_run):
     """copies data files (not directories) from assign_dir/ to dest_root_dir/assign_dir/data"""
     cwd = pathlib.Path(".").absolute()
     assign_dir = pathlib.Path(assign_dir).expanduser().absolute()
+    try:
+        assign_dir = assign_dir.relative_to(cwd)
+    except ValueError:
+        pass
+
     if not valid_assignment_dir(assign_dir):
         click.secho(f"Assignment directories must contain a .ipynb file", fg="red")
         exit()
@@ -47,6 +52,10 @@ def main(dest_root_dir, assign_dir, force, dry_run):
     assert dest_root_dir.is_dir(), "dest_root_dir must be a directory"
 
     dest_dir = dest_root_dir / assign_dir.name
+
+    if dry_run:
+        click.secho(f"Assignment dir: {assign_dir}", fg="blue")
+        click.secho(f"Dest dir: {dest_dir}", fg="blue")
 
     excludes = [".py", ".r", ".ipynb", ".png", ".jpg", ".html"]
     # get data paths
@@ -65,7 +74,7 @@ def main(dest_root_dir, assign_dir, force, dry_run):
         if not dry_run:
             dest_parent.mkdir(parents=True, exist_ok=True)
             # move data to dest
-            dest = data_path.replace(dest)
+            data_path.replace(dest)
             # create symlink at original path
             data_path.symlink_to(dest)
         else:
@@ -74,12 +83,10 @@ def main(dest_root_dir, assign_dir, force, dry_run):
                 created_paths.add(str(dest_parent))
 
             click.secho(
-                f"Will move '{data_path.relative_to(cwd)}' to '{dest.relative_to(cwd)}'",
-                fg="green",
+                f"Will move '{data_path}' to '{dest}'", fg="green",
             )
             click.secho(
-                f"Will symlink '{dest.relative_to(cwd)}' to '{data_path.relative_to(cwd)}'",
-                fg="green",
+                f"Will symlink '{dest}' to '{data_path}'", fg="green",
             )
 
     click.secho("Done!", fg="green")
