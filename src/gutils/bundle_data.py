@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """bundles all non-python, non-r, non-ipynb script files into a dir
 replacing with symlinks"""
-import click
 import pathlib
 
 
@@ -34,11 +33,6 @@ def valid_assignment_dir(assign_dir: pathlib.Path):
     return len(nbks) >= 1
 
 
-@click.command()
-@click.argument("assign_dir", type=click.Path(exists=True))
-@click.argument("dest_root_dir", type=click.Path(), default="/home2/data")
-@click.option("-F", "--force", flag_value=True, help="force over write of dest_dir")
-@click.option("-D", "--dry_run", flag_value=True, help="display what will be done")
 def main(dest_root_dir, assign_dir, force, dry_run):
     """copies data files (not directories) from assign_dir/ to dest_root_dir/assign_dir/data"""
     cwd = pathlib.Path(".").absolute()

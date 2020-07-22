@@ -66,7 +66,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "gutils=gutils.bundle_data:main",
+            "gutils=gutils.cli:main",
         ],
     },
     packages=find_packages(where="src"),
