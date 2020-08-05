@@ -8,6 +8,7 @@ def variables_exist(var_names, scope):
         msg = ", ".join(f"{n}" for n in absent)
         raise AssertionError(f"The following expected variables are missing: {msg}")
 
+
 def variables_types(names_types, scope):
     """raises an AssertionError if type of name in scope not in expected"""
     wrong = []
@@ -22,10 +23,10 @@ def variables_types(names_types, scope):
         if got not in expect:
             wrong.append((f"type of '{name}'='{got}' not in {expect}"))
 
-
     if wrong:
         msg = "\n".join(wrong)
         raise AssertionError(f"The following variables had an incorrect type: {msg}")
+
 
 def variables_values(names_values, scope):
     """raises an AssertionError if type of name in scope not in expected"""
@@ -40,8 +41,6 @@ def variables_values(names_values, scope):
         if got != expect:
             wrong.append((f"value of '{name}'='{got}' does not equal {expect}"))
 
-
     if wrong:
         msg = "\n".join(wrong)
         raise AssertionError(f"The following variables had incorrect values: {msg}")
-

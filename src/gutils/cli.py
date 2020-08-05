@@ -6,6 +6,7 @@ import pathlib
 import click
 
 import gutils.bundle_data as BD
+import gutils.nbgrader_fetched as FETCH
 import gutils.rinstall as RK
 
 
@@ -36,6 +37,12 @@ def rkernel():
 def cran(package_file):
     """installs CRAN packages"""
     RK.cran(package_file)
+
+
+@main.command()
+def log_fetched():
+    """logs times when assignments fetched to a json file"""
+    FETCH.main()
 
 
 if __name__ == "__main__":
