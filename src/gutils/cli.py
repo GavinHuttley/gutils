@@ -6,6 +6,7 @@ import pathlib
 import click
 
 import gutils.bundle_data as BD
+import gutils.inject_marks as MK
 import gutils.nbgrader_fetched as FETCH
 import gutils.rinstall as RK
 
@@ -43,6 +44,13 @@ def cran(package_file):
 def log_fetched():
     """logs times when assignments fetched to a json file"""
     FETCH.main()
+
+
+@main.command()
+@click.argument("notebooks", required=True, type=click.Path(exists=True))
+def inject_marks(notebooks):
+    """inserts how many points each nbgrader assessed cell is worth"""
+    MK.main(notebooks)
 
 
 if __name__ == "__main__":
