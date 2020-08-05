@@ -1,15 +1,15 @@
 """functions for validating student nbgrader assignments"""
 
 
-def variables_exist(var_names, scope):
-    """raises an AssertionError if scope does not contain var_names"""
+def expected_variables_exist(var_names, scope):
+    """raises an AssertionError if scope does not contain expected var_names"""
     absent = [var_name for var_name in var_names if var_name not in scope]
     if absent:
         msg = ", ".join(f"{n}" for n in absent)
         raise AssertionError(f"The following expected variables are missing: {msg}")
 
 
-def variables_types(names_types, scope):
+def expected_variables_types(names_types, scope):
     """raises an AssertionError if type of name in scope not in expected"""
     wrong = []
     names_types = dict(names_types)
@@ -28,7 +28,7 @@ def variables_types(names_types, scope):
         raise AssertionError(f"The following variables had an incorrect type: {msg}")
 
 
-def variables_values(names_values, scope):
+def expected_variables_values(names_values, scope):
     """raises an AssertionError if type of name in scope not in expected"""
     wrong = []
     names_values = dict(names_values)
