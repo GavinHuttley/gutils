@@ -23,9 +23,11 @@ def inject_mark_comments(path):
     with open(path) as infile:
         data = json.load(infile)
 
+    total = 0
     for cell in data["cells"]:
         try:
             points = cell["metadata"]["nbgrader"]["points"]
+            total += float(points)
         except KeyError:
             points = None
 
@@ -44,6 +46,8 @@ def inject_mark_comments(path):
 
     output = json.dumps(data, indent=2)
     path.write_text(output)
+
+    print(f"total assignment points = {total}")
 
 
 def main(path):
