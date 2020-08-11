@@ -46,3 +46,51 @@ def expected_variables_values(names_values, scope):
     if wrong:
         msg = "\n".join(wrong)
         raise AssertionError(f"The following variables had incorrect values: {msg}")
+
+
+def function_does_not_fail(func, *inputs):
+    """function does not fail on the provided inputs"""
+    errors = []
+    for input in inputs:
+        try:
+            _ = func(input)
+        except Exception as err:
+            msg = f"failed on {input}: {err}"
+            errors.append(msg)
+    if errors:
+        raise AssertionError("\n".join(errors))
+
+
+def _get_types(result, single):
+    if single:
+        result = [result]
+
+    return [type(item) for item in result]
+
+
+def function_returned_correct_types(func, expected_types, *inputs):
+    """function returns types matching expected_types"""
+    if isinstance(expected_types, type):
+        expected_types = [expected_types]
+        single = True
+    else:
+        single = False
+    errors = []
+    for input in inputs:
+        try:
+            got = func(input)
+            got_types = _get_types(got, single)
+        except Exception as err:
+            msg = f"failed on {input}: {err}"
+            errors.append(msg)
+
+        if got_types != expected_types:
+            msg = (
+                f"{got_types[0]} != {expected_types[0]}"
+                if single
+                else f"{got_types} != {expected_types}"
+            )
+            errors.append(msg)
+
+    if errors:
+        raise AssertionError("\n".join(errors))
