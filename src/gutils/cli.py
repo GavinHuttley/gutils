@@ -47,6 +47,13 @@ def log_fetched():
 
 
 @main.command()
+@click.option("-i", "--uni_id", help="student ID")
+def student_fetch_record(uni_id):
+    """displays times when student fetched assignments"""
+    FETCH.check_student(uni_id)
+
+
+@main.command()
 @click.argument("notebooks", required=True, type=click.Path(exists=True))
 def inject_marks(notebooks):
     """inserts how many points each nbgrader assessed cell is worth"""

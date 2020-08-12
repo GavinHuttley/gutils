@@ -90,3 +90,18 @@ def main():
     currlog = load_log()
     mods = get_student_fetched_times(currlog)
     write_log(mods)
+
+
+def check_student(student_id):
+    from cogent3 import make_table
+
+    currlog = load_log()
+    columns = ["Assignment", "Time Seen"]
+    result = {c: [] for c in columns}
+    for assignment in currlog:
+        time = currlog[assignment].get(student_id, "None")
+        result["Assignment"].append(assignment)
+        result["Time Seen"].append(time)
+
+    table = make_table(columns, data=result, title=f"Fetch times for {student_id}")
+    print(table)
