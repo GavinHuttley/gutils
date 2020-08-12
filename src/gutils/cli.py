@@ -47,7 +47,7 @@ def log_fetched():
 
 
 @main.command()
-@click.option("-i", "--uni_id", help="student ID")
+@click.option("-i", "--uni_id", required=True, help="student ID")
 def student_fetch_record(uni_id):
     """displays times when student fetched assignments"""
     FETCH.check_student(uni_id)
