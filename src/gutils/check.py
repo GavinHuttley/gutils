@@ -83,8 +83,9 @@ def function_returned_correct_types(func, expected_types, *inputs):
         except Exception as err:
             msg = f"failed on {input}: {err}"
             errors.append(msg)
+            got_types = None
 
-        if got_types != expected_types:
+        if got_types != expected_types and got_types is not None:
             msg = (
                 f"{got_types[0]} != {expected_types[0]}"
                 if single
