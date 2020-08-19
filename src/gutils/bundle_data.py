@@ -59,7 +59,7 @@ def main(dest_root_dir, assign_dir, force, dry_run):
         click.secho(f"Assignment dir: {assign_dir}", fg="blue")
         click.secho(f"Dest dir: {dest_dir}", fg="blue")
 
-    excludes = [".py", ".r", ".ipynb", ".png", ".jpg", ".html"]
+    excludes = [".py", ".r", ".ipynb", ".png", ".jpg", ".html", ".docx"]
     # get data paths
     data_paths = get_data_paths(assign_dir, excludes)
     created_paths = set()
