@@ -1,12 +1,27 @@
 """functions for validating student nbgrader assignments"""
 
 
-def expected_variables_exist(var_names, scope):
+def expected_variables_exist(var_names, scope, callables=None):
     """raises an AssertionError if scope does not contain expected var_names"""
+    callables = callables or []
     absent = [var_name for var_name in var_names if var_name not in scope]
+    not_callable = [
+        func
+        for func in callables
+        if not callable(scope.get(func)) and func not in absent
+    ]
+    msgs = []
     if absent:
         msg = ", ".join(f"{n}" for n in absent)
-        raise AssertionError(f"The following expected variables are missing: {msg}")
+        msg = f"The following expected variables are missing: {msg}"
+        msgs.append(msg)
+
+    if not_callable:
+        msg = ", ".join(f"{n}" for n in not_callable)
+        msgs.append(f"The following are not callable: {msg}")
+
+    if msgs:
+        raise AssertionError("\n".join(msgs))
 
 
 def expected_variables_types(names_types, scope):
