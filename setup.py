@@ -4,7 +4,6 @@ import sys
 
 from setuptools import find_packages, setup
 
-
 __author__ = "Gavin Huttley"
 __copyright__ = "Copyright 2014, Gavin Huttley"
 __credits__ = ["Gavin Huttley"]
@@ -61,14 +60,8 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Operating System :: OS Independent",
     ],
-    install_requires=[
-        "click",
-    ],
-    entry_points={
-        "console_scripts": [
-            "gutils=gutils.cli:main",
-        ],
-    },
+    install_requires=["click",],
+    entry_points={"console_scripts": ["gutils=gutils.cli:main",],},
     packages=find_packages(where="src"),
     package_dir={"": PACKAGE_DIR},
     project_urls=PROJECT_URLS,

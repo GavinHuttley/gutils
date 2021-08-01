@@ -85,10 +85,12 @@ def main(dest_root_dir, assign_dir, force, dry_run):
                 created_paths.add(str(dest_parent))
 
             click.secho(
-                f"Will move '{data_path}' to '{dest}'", fg="green",
+                f"Will move '{data_path}' to '{dest}'",
+                fg="green",
             )
             click.secho(
-                f"Will symlink '{dest}' to '{data_path}'", fg="green",
+                f"Will symlink '{dest}' to '{data_path}'",
+                fg="green",
             )
 
     click.secho("Done!", fg="green")
