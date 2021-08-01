@@ -20,7 +20,7 @@ if sys.version_info < (3, 6):
         "Python-3.6 or greater is required, Python-%s used." % py_version
     )
 
-short_description = "MutationMotif"
+short_description = "gutils"
 
 readme_path = pathlib.Path(__file__).parent / "README.md"
 long_description = readme_path.read_text()
@@ -60,8 +60,12 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Operating System :: OS Independent",
     ],
-    install_requires=["click",],
-    entry_points={"console_scripts": ["gutils=gutils.cli:main",],},
+    install_requires=["click", "tqdm"],
+    entry_points={
+        "console_scripts": [
+            "gutils=gutils.cli:main",
+        ],
+    },
     packages=find_packages(where="src"),
     package_dir={"": PACKAGE_DIR},
     project_urls=PROJECT_URLS,
