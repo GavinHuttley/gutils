@@ -7,7 +7,9 @@ MARK_COMMENT = "This part worth"
 
 def remove_previous(source):
     """removes all previous lines containing a mark"""
-    return [l for l in source if MARK_COMMENT not in l]
+    result = [l for l in source if MARK_COMMENT not in l]
+    # now remove all blank lines at the start
+    return [l for l in result if l.strip()]
 
 
 def insert_total(cell, point):
