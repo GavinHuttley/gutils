@@ -19,7 +19,7 @@ def get_data_paths(assign_dir: pathlib.Path, excludes):
         ):
             continue
 
-        moving.append(fn)
+        moving.append(assign_dir / fn)
     return moving
 
 
