@@ -9,8 +9,10 @@ import click
 def get_data_paths(assign_dir: pathlib.Path, excludes):
     moving = []
     for fn in assign_dir.glob("**/*"):
+        fn = fn.relative_to(assign_dir)
         if (
-            fn.suffix.lower() in excludes
+            str(fn).startswith(".")
+            or fn.suffix.lower() in excludes
             or fn.name.startswith(".")
             or fn.is_dir()
             or fn.is_symlink()
