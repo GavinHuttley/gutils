@@ -19,7 +19,7 @@ def main():
 
 @main.command()
 @click.argument("assign_dir", type=click.Path(exists=True))
-@click.argument("dest_root_dir", type=click.Path(), default="/home2/data")
+@click.argument("dest_root_dir", type=click.Path(), default="/home/data")
 @click.option("-F", "--force", flag_value=True, help="force over write of dest_dir")
 @click.option("-D", "--dry_run", flag_value=True, help="display what will be done")
 def bundle_data(dest_root_dir, assign_dir, force, dry_run):
