@@ -1,6 +1,9 @@
 """functions for validating student nbgrader assignments"""
 
 
+from numpy import ndarray
+
+
 def expected_variables_exist(var_names, scope, callables=None):
     """raises an AssertionError if scope does not contain expected var_names"""
     callables = callables or []
@@ -36,6 +39,10 @@ def expected_variables_types(names_types, scope, array_types=False):
             continue
 
         value = scope[name]
+        if array_types and not isinstance(value, ndarray):
+            wrong.append(f"{name} type pf {type(value)}!=ndarray")
+            continue
+
         if array_types and type_ not in str(value.dtype):
             wrong.append(f"dtype prefix {type_} not in '{value.dtype}' for '{name}'")
         elif not array_types:
@@ -66,6 +73,43 @@ def expected_variables_values(names_values, scope):
     if wrong:
         msg = "\n".join(wrong)
         raise AssertionError(f"The following variables had incorrect values: {msg}")
+
+
+def expected_variables_attrib_values(names_values, attrib_name, scope):
+    """
+    Parameters
+    ----------
+    names_values
+        variable name, expected attribute value
+    attrib_name
+        name of attribute expected to exist on variables
+    scope
+
+    Raises AssertionError if attribute does not exist or value of attribute
+    incorrect.
+    """
+    wrong = []
+    names_values = dict(names_values)
+    for name, expect in names_values.items():
+        if name not in scope:
+            wrong.append(f"'{name}' not present")
+            continue
+
+        attrib_value = getattr(scope[name], attrib_name, None)
+        if attrib_value is None:
+            wrong.append(f"'{name}' does not have attribute {attrib_name}")
+            continue
+
+        if attrib_value != expect:
+            expect = repr(expect) if isinstance(expect, str) else expect
+            got = repr(attrib_value) if isinstance(attrib_value, str) else attrib_value
+            wrong.append(
+                (f"value of {name}.{attrib_name}={got} does not equal {expect}")
+            )
+
+    if wrong:
+        msg = "\n".join(wrong)
+        raise AssertionError(f"The following variables were incorrect: {msg}")
 
 
 def function_does_not_fail(func, *inputs):
