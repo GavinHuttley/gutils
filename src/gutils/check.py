@@ -24,8 +24,10 @@ def expected_variables_exist(var_names, scope, callables=None):
         raise AssertionError("\n".join(msgs))
 
 
-def expected_variables_types(names_types, scope):
-    """raises an AssertionError if type of name in scope not in expected"""
+def expected_variables_types(names_types, scope, array_types=False):
+    """raises an AssertionError if type of name in scope not in expected
+
+    if array_types, checks `dtype` attribute"""
     wrong = []
     names_types = dict(names_types)
     for name, type_ in names_types.items():
@@ -33,10 +35,13 @@ def expected_variables_types(names_types, scope):
             wrong.append(f"'{name}' not present")
             continue
 
-        expect = {type_} if isinstance(type_, type) else set(type_)
-        got = type(scope[name])
-        if got not in expect:
-            wrong.append((f"type of '{name}'='{got}' not in {expect}"))
+        value = scope[name]
+        if array_types and type_ not in str(value.dtype):
+            wrong.append(f"dtype prefix {type_} not in '{value.dtype}' for '{name}'")
+        elif not array_types:
+            expect = {type_} if isinstance(type_, type) else set(type_)
+            if type(value) not in expect:
+                wrong.append((f"type of '{name}'='{type(value)}' not in {expect}"))
 
     if wrong:
         msg = "\n".join(wrong)
