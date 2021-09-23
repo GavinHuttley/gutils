@@ -68,7 +68,7 @@ def expected_variables_values(names_values, scope):
         if got != expect:
             expect = repr(expect) if isinstance(expect, str) else expect
             got = repr(got) if isinstance(got, str) else got
-            wrong.append((f"value of {name}={got} does not equal {expect}"))
+            wrong.append(f"value of {name}={got} does not equal {expect}")
 
     if wrong:
         msg = "\n".join(wrong)
