@@ -42,7 +42,7 @@ setup(
     long_description_content_type="text/md",
     url="https://github.com/GavinHuttley/gutils",
     platforms=["any"],
-    license=["BSD"],
+    license="BSD",
     keywords=[
         "biology",
         "genomics",
