@@ -16,8 +16,8 @@ def get_courseid():
 
 USER_ROOT = pathlib.Path("/home2")
 COURSEID = get_courseid()
-EXHCHANGE_OUTBOUND = pathlib.Path(f"/home2/srv/nbgrader/exchange/{COURSEID}/outbound/")
-LOGPATH = pathlib.Path("/home2/srv/nbgrader/nbgrader_fetched.json")
+EXHCHANGE_OUTBOUND = pathlib.Path(f"/home/srv/nbgrader/exchange/{COURSEID}/outbound/")
+LOGPATH = pathlib.Path("/home/srv/nbgrader/nbgrader_fetched.json")
 
 
 def get_student_homes():
