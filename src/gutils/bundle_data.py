@@ -2,6 +2,7 @@
 """bundles all non-python, non-r, non-ipynb script files into a dir
 replacing with symlinks"""
 import pathlib
+import shutil
 
 import click
 
@@ -65,6 +66,8 @@ def main(dest_root_dir, assign_dir, force, dry_run):
     data_paths = get_data_paths(assign_dir, excludes)
     created_paths = set()
     for data_path in data_paths:
+        owner = data_path.owner()
+        group = data_path.group()
         # create dest paths
         dest, dest_parent = get_dest(assign_dir, dest_dir, data_path)
         if dest.exists() and not force:
@@ -80,6 +83,8 @@ def main(dest_root_dir, assign_dir, force, dry_run):
             data_path.replace(dest)
             # create symlink at original path
             data_path.symlink_to(dest)
+            # change owner and group
+            shutil.chown(dest, user=owner, group=group)
         else:
             if str(dest_parent) not in created_paths:
                 click.secho(f"Will create path: '{dest_parent}'", fg="blue")
