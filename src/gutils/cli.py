@@ -60,5 +60,15 @@ def inject_marks(notebooks):
     MK.main(notebooks)
 
 
+@main.command()
+@click.argument("submitted_dir", type=click.Path(exists=True))
+@click.argument("assignment_name", type=str)
+def nb2py(submitted_dir, assignment_name):
+    """inserts how many points each nbgrader assessed cell is worth"""
+    from gutils.nb2py import make_scripts
+
+    make_scripts(submitted_dir, assignment_name)
+
+
 if __name__ == "__main__":
     main()
