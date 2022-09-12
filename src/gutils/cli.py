@@ -70,5 +70,64 @@ def nb2py(submitted_dir, assignment_name):
     make_scripts(submitted_dir, assignment_name)
 
 
+@main.command()
+@click.argument("outpath", required=True, type=click.Path())
+def export_grades(outpath):
+    """export all assignments in the gradebook.db"""
+    import os
+    import re
+
+    from cogent3 import make_table
+    from nbgrader.api import Gradebook
+
+    valid_user = re.compile("grader-biol(3157|6243)")
+    course = re.compile("(biol3157|biol6243)")
+    topics = re.compile("(python|seqcomp|molevol|microres)")
+
+    user = os.environ["USER"]
+    if not valid_user.search(user):
+        click.secho(f"Invalid user {user!r}")
+        exit(1)
+
+    rootdir = pathlib.Path("~").expanduser()
+    courseid = course.findall(user)[0]
+    gradebook_path = rootdir / courseid / "gradebook.db"
+
+    if not gradebook_path.exists():
+        click.secho(f"Could not find {str(gradebook_path)!r}")
+        exit(1)
+
+    gb = Gradebook(f"sqlite:///{str(gradebook_path)}")
+
+    allresults = {}
+    student_details = {}
+    for assignment in gb.assignments:
+        if not topics.search(assignment.name):
+            continue
+
+        results = {}
+        for s in assignment.submissions:
+            student_details[s.student_id] = s.student
+            results[s.student_id] = s.score
+        allresults[assignment.name] = results
+
+    student_ids = sorted(student_details)
+    data = {
+        "anuid": student_ids,
+        "name": [
+            " ".join((student_details[s].first_name, student_details[s].last_name))
+            for s in student_details
+        ],
+    }
+    assignment_titles = sorted(allresults)
+    for name in assignment_titles:
+        scores = allresults[name]
+        data[name] = [scores.get(studentid, 0.0) for studentid in student_ids]
+
+    table = make_table(data=data, digits=2)
+    table.write(outpath)
+    click.secho(f"Wrote {outpath}", fg="green")
+
+
 if __name__ == "__main__":
     main()

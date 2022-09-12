@@ -35,4 +35,3 @@ def make_scripts(indir, assignment_name):
         code = get_code_cells(path)
         outpath = path.parent / f"{path.stem}.py"
         outpath.write_text(code)
-
