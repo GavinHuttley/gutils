@@ -36,7 +36,3 @@ def make_scripts(indir, assignment_name):
         outpath = path.parent / f"{path.stem}.py"
         outpath.write_text(code)
 
-
-path = "/Users/gavin/repos/topics-assignments/submitted/u5111745/python_quiz_1/python_quiz_1.ipynb"
-
-make_scripts("/Users/gavin/repos/topics-assignments/submitted", "python_assignment")

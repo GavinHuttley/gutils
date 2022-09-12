@@ -64,7 +64,7 @@ def inject_marks(notebooks):
 @click.argument("submitted_dir", type=click.Path(exists=True))
 @click.argument("assignment_name", type=str)
 def nb2py(submitted_dir, assignment_name):
-    """inserts how many points each nbgrader assessed cell is worth"""
+    """convert notebook to just the script portion"""
     from gutils.nb2py import make_scripts
 
     make_scripts(submitted_dir, assignment_name)
