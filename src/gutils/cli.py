@@ -2,6 +2,9 @@
 """bundles all non-python, non-r, non-ipynb script files into a dir
 replacing with symlinks"""
 import pathlib
+from warnings import simplefilter
+
+simplefilter("ignore", Warning)
 
 import click
 
