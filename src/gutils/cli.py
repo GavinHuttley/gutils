@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """bundles all non-python, non-r, non-ipynb script files into a dir
 replacing with symlinks"""
+import datetime
 import pathlib
 from warnings import simplefilter
 
@@ -73,10 +74,31 @@ def nb2py(submitted_dir, assignment_name):
     make_scripts(submitted_dir, assignment_name)
 
 
+def _assessment_key(name):
+    import re
+
+    digit = re.compile("\d$")
+    if digit.search(name):
+        n = int(name[-1])
+    else:
+        n = 4
+    q = 1 if "quiz" in name else 2
+    topic = {"python": 1, "seqcomp": 2, "molevol": 3}[name.split("_")[0]]
+    return topic, q, n
+
+
 @main.command()
-@click.argument("outpath", required=True, type=click.Path())
-def export_grades(outpath):
+@click.argument("outdir", required=True, type=pathlib.Path, default=".")
+def export_grades(outdir):
     """export all assignments in the gradebook.db"""
+
+    outdir = outdir.expanduser().absolute()
+
+    if not outdir.is_dir():
+        outdir = str(outdir)
+        click.secho(f"{outdir=} must be a directory", fg="red")
+        exit(1)
+
     import os
     import re
 
@@ -96,40 +118,43 @@ def export_grades(outpath):
     courseid = course.findall(user)[0]
     gradebook_path = rootdir / courseid / "gradebook.db"
 
+    today = datetime.date.today()
+    outpath = outdir / f"{courseid}-{today:%Y-%m-%d}.tsv"
+
     if not gradebook_path.exists():
         click.secho(f"Could not find {str(gradebook_path)!r}")
         exit(1)
 
     gb = Gradebook(f"sqlite:///{str(gradebook_path)}")
 
-    allresults = {}
-    student_details = {}
+    assignment_scores = {}
+    students = {}
     for assignment in gb.assignments:
         if not topics.search(assignment.name):
             continue
 
         results = {}
         for s in assignment.submissions:
-            student_details[s.student_id] = s.student
+            students[s.student_id] = s.student
             results[s.student_id] = s.score
-        allresults[assignment.name] = results
+        assignment_scores[assignment.name] = results
 
-    student_ids = sorted(student_details)
+    student_ids = {s: s for s in students}
     data = {
         "anuid": student_ids,
-        "name": [
-            " ".join((student_details[s].first_name, student_details[s].last_name))
-            for s in student_details
-        ],
+        "name": {
+            s: " ".join((students[s].first_name, students[s].last_name))
+            for s in students
+        },
     }
-    assignment_titles = sorted(allresults)
-    for name in assignment_titles:
-        scores = allresults[name]
-        data[name] = [scores.get(studentid, 0.0) for studentid in student_ids]
+    assignment_titles = sorted(assignment_scores, key=lambda x: _assessment_key(x))
+    for title in assignment_titles:
+        scores = assignment_scores[title]
+        data[title] = {s: scores.get(s, 0.0) for s in student_ids}
 
     table = make_table(data=data, digits=2)
     table.write(outpath)
-    click.secho(f"Wrote {outpath}", fg="green")
+    click.secho(f"Wrote {str(outpath)!r}", fg="green")
 
 
 if __name__ == "__main__":
