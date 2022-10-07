@@ -29,8 +29,11 @@ def get_code_cells(path):
 def make_scripts(indir, assignment_name):
     indir = pathlib.Path(indir)
     paths = indir.glob("**/*.ipynb")
+    student_file = re.compile(r"(assignment|quiz)\S+ipynb")
     for path in paths:
         if assignment_name not in path.parts:
+            continue
+        if not student_file.search(path.name):
             continue
         code = get_code_cells(path)
         outpath = path.parent / f"{path.stem}.py"
