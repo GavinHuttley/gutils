@@ -2,6 +2,7 @@
 import json
 import pathlib
 import re
+from rich.progress import track
 
 _excludes = re.compile(
     "(Additional checks|ANUID|Enter your code here|This part worth|complete this function)"
@@ -28,9 +29,10 @@ def get_code_cells(path):
 
 def make_scripts(indir, assignment_name):
     indir = pathlib.Path(indir)
-    paths = indir.glob("**/*.ipynb")
+    # get all student dirs
+    paths = list(indir.glob(f"*/{assignment_name}/*ipynb"))
     student_file = re.compile(r"(assignment|quiz)\S+ipynb")
-    for path in paths:
+    for path in track(paths):
         if assignment_name not in path.parts:
             continue
         if not student_file.search(path.name):
