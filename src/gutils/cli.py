@@ -83,7 +83,7 @@ def _assessment_key(name):
     else:
         n = 4
     q = 1 if "quiz" in name else 2
-    topic = {"python": 1, "seqcomp": 2, "molevol": 3}[name.split("_")[0]]
+    topic = {"python": 1, "seqcomp": 2, "molevol": 3, "microres": 4}[name.split("_")[0]]
     return topic, q, n
 
 
