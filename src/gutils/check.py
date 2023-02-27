@@ -222,6 +222,50 @@ _accessory = {
         "_distutils_hack",
         "sphinxcontrib",
     ],
+    "jupyter": [
+        "storemagic",
+        "ipython_genutils",
+        "appnope",
+        "traitlets",
+        "pickleshare",
+        "jupyter_client",
+        "_pydev_bundle",
+        "parso",
+        "prompt_toolkit",
+        "ptyprocess",
+        "pexpect",
+        "_distutils_hack",
+        "_pydevd_bundle",
+        "IPython",
+        "setuptools",
+        "dateutil",
+        "pygments",
+        "pydevconsole",
+        "_pydevd_frame_eval",
+        "sphinxcontrib",
+        "decorator",
+        "wcwidth",
+        "backcall",
+        "colorama",
+        "entrypoints",
+        "six",
+        "_pydev_runfiles",
+        "distutils",
+        "pydevd_tracing",
+        "numpy",
+        "jupyter_core",
+        "zmq",
+        "pkg_resources",
+        "ipykernel",
+        "debugpy",
+        "pydevd_file_utils",
+        "pydevd_plugins",
+        "jedi",
+        "gutils",
+        "pydev_ipython",
+        "tornado",
+        "pydevd",
+    ],
 }
 
 
@@ -232,6 +276,7 @@ def allowed_modules(allowed=None):
 
     invalid = set()
     allowed = allowed or []
+    allowed.append("jupyter")
     if allowed:
         for k, v in _accessory.items():
             if k in allowed:
