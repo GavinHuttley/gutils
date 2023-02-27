@@ -159,3 +159,103 @@ def function_returned_correct_types(func, expected_types, *inputs):
 
     if errors:
         raise AssertionError("\n".join(errors))
+
+
+_accessory = {
+    "pandas": ["pandas", "numpy", "dateutil", "pytz", "six"],
+    "numpy": ["numpy"],
+    "cogent3": [
+        "_cffi_backend",
+        "mpi4py",
+        "wcwidth",
+        "platformdirs",
+        "jedi",
+        "jupyter_client",
+        "cogent3",
+        "ptyprocess",
+        "decorator",
+        "ipykernel",
+        "pycparser",
+        "asttokens",
+        "yaml",
+        "pickleshare",
+        "pure_eval",
+        "tornado",
+        "typing_extensions",
+        "ipython_genutils",
+        "pexpect",
+        "executing",
+        "zmq",
+        "parso",
+        "comm",
+        "tinydb",
+        "backcall",
+        "psutil",
+        "entrypoints",
+        "prompt_toolkit",
+        "six",
+        "tqdm",
+        "cffi",
+        "numba",
+        "ipywidgets",
+        "IPython",
+        "scipy",
+        "jupyter_core",
+        "colorama",
+        "stack_data",
+        "pygments",
+        "scitrack",
+        "dateutil",
+        "traitlets",
+        "llvmlite",
+        "chardet",
+        "plotly",
+        "_plotly_utils",
+        "_distutils_hack",
+        "pkg_resources",
+        "sphinxcontrib",
+        "numpy",
+    ],
+    "plotly": [
+        "plotly",
+        "_plotly_utils",
+        "_distutils_hack",
+        "sphinxcontrib",
+    ],
+}
+
+
+def allowed_modules(allowed=None):
+    import inspect
+    import pathlib
+    import sys
+
+    invalid = set()
+    allowed = allowed or []
+    if allowed:
+        for k, v in _accessory.items():
+            if k in allowed:
+                allowed.extend(v)
+
+    allowed.extend(sys.builtin_module_names)
+    allowed = set(allowed)
+    for name, module in sorted(sys.modules.items()):
+        if not inspect.ismodule(module):
+            continue
+        name = name.split(".")[0]
+        if name in allowed:
+            continue
+
+        try:
+            name = module.__name__.split(".")[0]
+        except AttributeError:
+            print(name, type(module))
+            exit()
+        f = getattr(module, "__file__", "") or ""
+        path = pathlib.Path(f)
+        if "site-packages" in path.parts:
+            invalid.add(name.split(".")[0])
+
+    if invalid:
+        invalid = ", ".join(f"{i!r}" for i in invalid)
+        raise RuntimeError(f"the following 3rd-party modules not allowed: {invalid}")
