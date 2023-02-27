@@ -67,3 +67,12 @@ def test_expected_variables_attrib_values():
             "shape",
             locals(),
         )
+
+
+def test_function_does_not_fail_multi_args():
+    def foo(a, b):
+        return True
+
+    a = ("a", "b")
+    b = 42
+    check.function_does_not_fail(foo, (a, b), multiple_args=True)

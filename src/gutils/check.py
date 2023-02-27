@@ -112,12 +112,15 @@ def expected_variables_attrib_values(names_values, attrib_name, scope):
         raise AssertionError(f"The following variables were incorrect: {msg}")
 
 
-def function_does_not_fail(func, *inputs):
+def function_does_not_fail(func, *inputs, multiple_args=False):
     """function does not fail on the provided inputs"""
     errors = []
     for input in inputs:
         try:
-            _ = func(input)
+            if multiple_args:
+                _ = func(*input)
+            else:
+                _ = func(input)
         except Exception as err:
             msg = f"failed on {input}: {err}"
             errors.append(msg)
