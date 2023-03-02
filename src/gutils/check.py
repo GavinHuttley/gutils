@@ -1,4 +1,5 @@
 """functions for validating student nbgrader assignments"""
+import copy
 import traceback
 
 from numpy import ndarray
@@ -320,7 +321,7 @@ def trapped_result(func, *args, **kwargs):
 
 
 def two_funcs_equivalent(func1, func2, *args, **kwargs):
-    r1 = trapped_result(func1, *args, **kwargs)
-    r2 = trapped_result(func2, *args, **kwargs)
+    r1 = trapped_result(func1, *copy.deepcopy(args), **copy.deepcopy(kwargs))
+    r2 = trapped_result(func2, *copy.deepcopy(args), **copy.deepcopy(kwargs))
     assert r1 == r2, f"Outputs from {func1.__name__} != {func2.__name__}\n{r1}\n{r2}\n"
     return True
