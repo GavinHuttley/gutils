@@ -226,6 +226,7 @@ _accessory = {
         "sphinxcontrib",
     ],
     "jupyter": [
+        "argcomplete",
         "storemagic",
         "ipython_genutils",
         "appnope",
