@@ -1,5 +1,5 @@
 """functions for validating student nbgrader assignments"""
-
+import traceback
 
 from numpy import ndarray
 
@@ -308,3 +308,19 @@ def allowed_modules(allowed=None):
     if invalid:
         invalid = ", ".join(f"{i!r}" for i in invalid)
         raise RuntimeError(f"the following 3rd-party modules not allowed: {invalid}")
+
+
+def trapped_result(func, *args, **kwargs):
+    """if func fails, returns the triggered exception type as a string"""
+    try:
+        result = func(*args, **kwargs)
+    except Exception:
+        result = traceback.format_exc().splitlines()[-1:]
+    return result
+
+
+def two_funcs_equivalent(func1, func2, *args, **kwargs):
+    r1 = trapped_result(func1, *args, **kwargs)
+    r2 = trapped_result(func2, *args, **kwargs)
+    assert r1 == r2, f"Outputs from {func1.__name__} != {func2.__name__}\n{r1}\n{r2}\n"
+    return True

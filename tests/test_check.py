@@ -76,3 +76,30 @@ def test_function_does_not_fail_multi_args():
     a = ("a", "b")
     b = 42
     check.function_does_not_fail(foo, (a, b), multiple_args=True)
+
+
+def foo_add(a, b):
+    if not isinstance(a, int):
+        raise TypeError
+    return a + b
+
+
+def foo_mul(a, b):
+    assert isinstance(a, int)  # to trigger unique failure
+    return a * b
+
+
+def test_trapped_result():
+    got = check.trapped_result(foo_add, 1, "b")
+    assert got[0].startswith("TypeError")
+
+
+@pytest.mark.parametrize("a,b", ((2, 1), ("2", 1)))
+def test_two_funcs_equivalent_pass(a, b):
+    assert check.two_funcs_equivalent(foo_add, foo_add, 2, 1)
+
+
+@pytest.mark.parametrize("a,b", ((2, 1), (2.0, 2)))
+def test_two_funcs_equivalent_fail(a, b):
+    with pytest.raises(AssertionError):
+        check.two_funcs_equivalent(foo_add, foo_mul, 2, 1)
