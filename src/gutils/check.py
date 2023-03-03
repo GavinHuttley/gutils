@@ -270,6 +270,16 @@ _accessory = {
         "pydev_ipython",
         "tornado",
         "pydevd",
+        "pure_eval",
+        "psutil",
+        "stack_data",
+        "comm",
+        "packaging",
+        "executing",
+        "asttokens",
+        "platformdirs",
+        "_pydev_imps",
+        "pydevd_concurrency_analyser",
     ],
 }
 
