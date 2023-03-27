@@ -333,5 +333,11 @@ def trapped_result(func, *args, **kwargs):
 def two_funcs_equivalent(func1, func2, *args, **kwargs):
     r1 = trapped_result(func1, *copy.deepcopy(args), **copy.deepcopy(kwargs))
     r2 = trapped_result(func2, *copy.deepcopy(args), **copy.deepcopy(kwargs))
-    assert r1 == r2, f"Outputs from {func1.__name__} != {func2.__name__}\n{r1}\n{r2}\n"
+    if r1 != r2:
+        r1 = str(r1)
+        r2 = str(r2)
+        output_1 = f"{r1[:50]}..." if len(r1) > 50 else r1
+        output_2 = f"{r2[:50]}..." if len(r2) > 50 else r2
+        msg = f"Outputs from {func1.__name__} != {func2.__name__}\n{output_1}\n{output_2}\n"
+        raise AssertionError(msg)
     return True
