@@ -304,7 +304,7 @@ def allowed_modules(allowed=None):
         if not inspect.ismodule(module):
             continue
         name = name.split(".")[0]
-        if name in allowed:
+        if name in allowed or name.startswith("_"):
             continue
 
         try:
