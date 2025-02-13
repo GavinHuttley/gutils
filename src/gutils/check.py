@@ -247,6 +247,7 @@ _accessory = {
         "pygments",
         "pydevconsole",
         "_pydevd_frame_eval",
+        "_pydevd_sys_monitoring",
         "sphinxcontrib",
         "decorator",
         "wcwidth",
