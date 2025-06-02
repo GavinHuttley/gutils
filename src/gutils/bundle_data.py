@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """bundles all non-python, non-r, non-ipynb script files into a dir
 replacing with symlinks"""
+
 import pathlib
 import shutil
 
@@ -47,7 +48,7 @@ def main(dest_root_dir, assign_dir, force, dry_run):
         pass
 
     if not valid_assignment_dir(assign_dir):
-        click.secho(f"Assignment directories must contain a .ipynb file", fg="red")
+        click.secho("Assignment directories must contain a .ipynb file", fg="red")
         exit()
 
     assert assign_dir.is_dir(), "assign_dir must be a directory"

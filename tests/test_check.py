@@ -1,5 +1,5 @@
 import pytest
-from numpy import array, log2, ndarray
+from numpy import array, log2
 
 from gutils import check
 

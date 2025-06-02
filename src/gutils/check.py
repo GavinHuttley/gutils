@@ -1,4 +1,5 @@
 """functions for validating student nbgrader assignments"""
+
 import copy
 import traceback
 
