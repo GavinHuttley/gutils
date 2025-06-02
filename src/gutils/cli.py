@@ -85,7 +85,7 @@ def _assessment_key(name):
         n = 4
     q = 1 if "quiz" in name else 2
 
-    topics = {"opensource": 0, "python": 1, "seqcomp": 2, "molevol": 3, "microres": 4}
+    topics = {"source": 0, "python": 1, "seqcomp": 2, "molevol": 3, "microres": 4}
     if (key := name.split("_")[0]) in topics:
         topic = topics[key]
     elif (key := name.split("_")[-1]) in topics:
