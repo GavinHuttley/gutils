@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """bundles all non-python, non-r, non-ipynb script files into a dir
 replacing with symlinks"""
+
 import datetime
 import pathlib
 from warnings import simplefilter
@@ -83,7 +84,14 @@ def _assessment_key(name):
     else:
         n = 4
     q = 1 if "quiz" in name else 2
-    topic = {"python": 1, "seqcomp": 2, "molevol": 3, "microres": 4}[name.split("_")[0]]
+
+    topics = {"opensource": 0, "python": 1, "seqcomp": 2, "molevol": 3, "microres": 4}
+    if (key := name.split("_")[0]) in topics:
+        topic = topics[key]
+    elif (key := name.split("_")[-1]) in topics:
+        topic = topics[key]
+    else:
+        raise KeyError(f"Could not find topic for {name}")
     return topic, q, n
 
 
