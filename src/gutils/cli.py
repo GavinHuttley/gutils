@@ -107,7 +107,7 @@ def export_grades(outdir):
 
     valid_user = re.compile("grader-biol(3157|6243)")
     course = re.compile("(biol3157|biol6243)")
-    topics = re.compile("(python|seqcomp|molevol|microres)")
+    topics = re.compile("(source|seqcomp|molevol|microres)")
 
     user = os.environ["USER"]
     if not valid_user.search(user):
